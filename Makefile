@@ -15,6 +15,9 @@ ASSEMBLY_OBJECTS := $(ASSEMBLY_SOURCES:.s=.o)
 
 ALL_OBJECTS := $(C_OBJECTS) $(ASSEMBLY_OBJECTS)
 
+Image.bin: Image.elf
+	$(OBJCOPY) --output-target=binary $^ $@
+
 Image.elf: $(ALL_OBJECTS) Link.ld
 	$(LD) $(ALL_OBJECTS) $(LDFLAGS) -nostdlib -T Link.ld -o $@
 
