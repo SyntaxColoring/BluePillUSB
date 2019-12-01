@@ -58,6 +58,8 @@ wait_for_systick:
 	eor r1, (1<<13)
 	str r1, [r0, GPIO_ODR_OFFSET]
 	
+	b wait_for_systick
+	
 .thumb_func
 spin:
 	b spin
