@@ -6,7 +6,7 @@ OBJCOPY := $(TOOLCHAIN_PREFIX)objcopy
 STM32LOADER := stm32loader
 STM32LOADER_PORT := /dev/tty.usbserial-1410
 
-SOURCE_DIRECTORY := Source
+SOURCE_DIRECTORY := .
 
 C_SOURCES := $(shell find $(SOURCE_DIRECTORY) -name '*.c')
 C_OBJECTS := $(C_SOURCES:.c=.o)
