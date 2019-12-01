@@ -48,15 +48,15 @@ main:
 	str r2, [r1, STK_CTRL_OFFSET]
 	
 wait_for_systick:
-	ldr r2, [r0, STK_LOAD_OFFSET]
+	ldr r2, [r1, STK_CTRL_OFFSET]
 	tst r2, (1<<16)
 	mov r2, 1
-	str r2, [r0]
+	str r2, [r1, STK_CTRL_OFFSET]
 	beq wait_for_systick
 	
-	ldr r1, [r0, GPIO_ODR_OFFSET]
-	eor r1, (1<<13)
-	str r1, [r0, GPIO_ODR_OFFSET]
+	ldr r2, [r0, GPIO_ODR_OFFSET]
+	eor r2, (1<<13)
+	str r2, [r0, GPIO_ODR_OFFSET]
 	
 	b wait_for_systick
 	
