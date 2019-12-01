@@ -2,15 +2,11 @@
 .thumb
 
 @ Minimal interrupt vector table, according to TRM 5.9.1.
-@ "a" so the section takes up space.
-.section startup_interrupt_vector_table, "a"
-.4byte 0x20005000 @ Initial top of stack.
-.4byte main       @ Reset vector.
-.4byte spin       @ Non-maskable interrupt handler.
-.4byte spin       @ Hard fault handler.
-
-
-.text
+interrupt_vector_table:
+	.4byte 0x20005000 @ Initial top of stack.
+	.4byte main       @ Reset vector.
+	.4byte spin       @ Non-maskable interrupt handler.
+	.4byte spin       @ Hard fault handler.
 
 .thumb_func
 main:
