@@ -3,6 +3,8 @@ CC := $(TOOLCHAIN_PREFIX)gcc
 LD := $(CC)
 AS := $(CC)
 OBJCOPY := $(TOOLCHAIN_PREFIX)objcopy
+STM32LOADER := stm32loader
+STM32LOADER_PORT := /dev/tty.usbserial-1410
 
 SOURCE_DIRECTORY := Source
 
@@ -40,3 +42,7 @@ $(C_HEADER_DEPENDENCIES): %.d: %.c
 clean:
 	$(RM) $(SOURCE_DIRECTORY)/*.{o,d}
 	$(RM) Image.elf
+
+.PHONY: push
+push: Image.bin
+	$(STM32LOADER) -p $(STM32LOADER_PORT) -f F1 -ewv $^
