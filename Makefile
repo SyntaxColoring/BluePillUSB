@@ -42,6 +42,7 @@ $(C_HEADER_DEPENDENCIES): %.d: %.c
 clean:
 	$(RM) $(SOURCE_DIRECTORY)/*.{o,d}
 	$(RM) Image.elf
+	$(RM) Image.bin
 
 .PHONY: push
 push: Image.bin
