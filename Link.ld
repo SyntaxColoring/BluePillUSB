@@ -33,10 +33,6 @@ SECTIONS
 		*(.data)
 	} >ram AT>rom
 
-	image_data_ram_origin = ADDR(.data);
-	image_data_rom_origin = LOADADDR(.data);
-	image_data_rom_end = image_data_ram_origin + SIZEOF(.data);
-
 	.text :
 	{
 		*(.text)
@@ -46,4 +42,11 @@ SECTIONS
 	{
 		*(.bss)
 	} >ram
+	
+	image_data_ram_origin = ADDR(.data);
+	image_data_rom_origin = LOADADDR(.data);
+	image_data_rom_end = image_data_ram_origin + SIZEOF(.data);
+	
+	image_bss_ram_origin = ADDR(.bss);
+	image_bss_ram_end = image_bss_ram_origin + SIZEOF(.bss);
 }
