@@ -9,8 +9,8 @@ STM32LOADER_PORT := /dev/tty.usbserial-1410
 Image.bin: Image.elf
 	$(OBJCOPY) --output-target=binary $^ $@
 
-Image.elf: Blinky.o Link.ld
-	$(LD) Blinky.o $(LDFLAGS) -nostdlib -o $@
+Image.elf: Blinky.o
+	$(LD) $< $(LDFLAGS) -nostdlib -o $@
 
 Blinky.o: Blinky.s
 	$(AS) -mcpu=cortex-m3 -c -o $@ $(ASFLAGS) $<
