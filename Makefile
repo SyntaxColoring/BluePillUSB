@@ -24,7 +24,7 @@ Image.elf: $(ALL_OBJECTS) Link.ld
 	$(LD) $(ALL_OBJECTS) $(LDFLAGS) -nostdlib -T Link.ld -o $@
 
 $(C_OBJECTS): %.o: %.c %.d
-	$(CC) -ffreestanding -Og -c -o $@ $(CFLAGS) $<
+	$(CC) -std=c11 -pedantic -Wall -Wextra -ffreestanding -Og -c -o $@ $(CFLAGS) $<
 
 $(ASSEMBLY_OBJECTS): %.o: %.s
 	$(AS) -mcpu=cortex-m3 -c -o $@ $(ASFLAGS) $<
