@@ -1,41 +1,43 @@
+#include <stdbool.h>
 #include <stdint.h>
+#include "LED.h"
 
-void enable_gpioc_clocking(void)
+void sleep(unsigned long int clock_cycles)
 {
-	const uintptr_t RCC_BASE = 0x40021000;
-	const uintptr_t RCC_APB2ENR_OFFSET = 0x18;
-	const unsigned int RCC_APB2ENR_GPIOC_BIT = 4;
+	const uintptr_t STK_BASE = 0xe000e010;
+	const uintptr_t STK_CTRL_OFFSET = 0x0;
+	const uintptr_t STK_LOAD_OFFSET = 0x4;
+	const uintptr_t STK_VAL_OFFSET = 0x8;
 	
-	volatile uint32_t* const rcc_apb2enr = (uint32_t*)(RCC_BASE+RCC_APB2ENR_OFFSET);
+	volatile uint32_t* stk_ctrl = (volatile uint32_t*)(STK_BASE+STK_CTRL_OFFSET);
+	volatile uint32_t* stk_load = (volatile uint32_t*)(STK_BASE+STK_LOAD_OFFSET);
+	volatile uint32_t* stk_val = (volatile uint32_t*)(STK_BASE+STK_VAL_OFFSET);
 	
-	*rcc_apb2enr = 1<<RCC_APB2ENR_GPIOC_BIT;
-}
-
-void turn_on_pc13(void)
-{
-	const uintptr_t GPIOC_BASE = 0x40011000;
-	const uintptr_t GPIO_CRH_OFFSET = 0x4;
-	const uintptr_t GPIO_ODR_OFFSET = 0xc;
-	const unsigned char CNF = 0x0; // General purpose, push-pull, output, maximum speed 10 MHz.
-	const unsigned char MODE = 0x1;
+	if ((clock_cycles & 0x00ffffff) != clock_cycles || !clock_cycles)
+	{
+		// This function doesn't account for when clock_cycles doesn't fit into a 24-bit value, or when it's 0.
+		// Spin forever to make the problem more obvious if that ever happens.
+		while (true) { }
+	}
 	
-	const unsigned int GPIO_CRH_P13_SHIFT = 20;
+	*stk_ctrl = 0; // Disable ticking while we set things up.
+	*stk_load = clock_cycles; // Set the value to be reloaded when stk_val rolls below 0.
+	*stk_val = 0; // Make sure stk_val rolls over immediately.  It will have junk in it from the last time sleep() was called.
+	*stk_ctrl = 1; // Enable ticking again.  This also chooses the clock source and chooses not to enable the interrupt.
 	
-	volatile uint32_t* const gpioc_crh = (uint32_t*)(GPIOC_BASE+GPIO_CRH_OFFSET);
-	volatile uint32_t* const gpioc_odr = (uint32_t*)(GPIOC_BASE+GPIO_ODR_OFFSET);
-	
-	// Set CRH[GPIO_CRH_P13_SHIFT+3:GPIO_CRH_P13] to CNF,MODE.
-	uint32_t crh_scratch = *gpioc_crh;
-	crh_scratch &= ~((uint32_t)0xf << GPIO_CRH_P13_SHIFT);
-	crh_scratch |= (uint32_t)((CNF<<2)|MODE) << GPIO_CRH_P13_SHIFT;
-	*gpioc_crh = crh_scratch;
-	
-	// Enable all pins.  Only P13 is configured as output, so that's the only one that's affected.
-	*gpioc_odr = 0x0000;
+	// Wait until COUNTFLAG is set, indicating stk_val rolled from 1 to 0.
+	while (((*stk_ctrl >> 16) & 1) == 0) { }
 }
 
 void main(void)
 {
-	enable_gpioc_clocking();
-	turn_on_pc13();
+	led_initialize();
+	
+	while (true)
+	{
+		led_set_state(true);
+		sleep(100000);
+		led_set_state(false);
+		sleep(900000);
+	}
 }
