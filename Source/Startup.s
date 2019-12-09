@@ -5,7 +5,7 @@
 @ "a" so the section takes up space.
 .section startup_interrupt_vector_table, "a"
 .4byte 0x20005000 @ Initial top of stack.
-.4byte startup       @ Reset vector.
+.4byte startup    @ Reset vector.
 .4byte spin       @ Non-maskable interrupt handler.
 .4byte spin       @ Hard fault handler.
 
