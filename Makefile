@@ -4,7 +4,15 @@ LD := $(CC)
 AS := $(CC)
 OBJCOPY := $(TOOLCHAIN_PREFIX)objcopy
 STM32LOADER := stm32loader
-STM32LOADER_PORT := /dev/tty.usbserial-1410
+
+# Try to autodetect the USB to UART adapter that's being used to program the device.
+# When this variable is evaluated:
+# - If SERIAL_PORT was given on the command line, use that.
+# - Else, if there are any /dev/ttyUSB* (as seen on Ubuntu) or /dev/tty.usb* (as seen on macOS) devices, use one of those.
+# - Else, quit with an error.
+AUTODETECTED_SERIAL_PORT = $(or $(SERIAL_PORT), \
+                                $(firstword $(wildcard /dev/ttyUSB*) $(wildcard /dev/tty.usb*)), \
+                                $(error Couldn't find a USB UART adapter.  Make sure it's connected, or manually specify it with SERIAL_PORT))
 
 SOURCE_DIRECTORY := Source
 
@@ -46,4 +54,4 @@ clean:
 
 .PHONY: push
 push: Image.bin
-	$(STM32LOADER) -p $(STM32LOADER_PORT) -f F1 -ewv $^
+	$(STM32LOADER) -p $(AUTODETECTED_SERIAL_PORT) -f F1 -ewv $^
