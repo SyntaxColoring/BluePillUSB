@@ -6,10 +6,10 @@ OBJCOPY := $(TOOLCHAIN_PREFIX)objcopy
 STM32LOADER := stm32loader
 STM32LOADER_PORT := /dev/tty.usbserial-1410
 
-Image.bin: Image.elf
+Blinky.bin: Blinky.elf
 	$(OBJCOPY) --output-target=binary $^ $@
 
-Image.elf: Blinky.o
+Blinky.elf: Blinky.o
 	$(LD) $< $(LDFLAGS) -Ttext=0x0 -nostdlib -o $@
 
 Blinky.o: Blinky.s
@@ -18,9 +18,9 @@ Blinky.o: Blinky.s
 .PHONY: clean
 clean:
 	$(RM) Blinky.o
-	$(RM) Image.elf
-	$(RM) Image.bin
+	$(RM) Blinky.elf
+	$(RM) Blinky.bin
 
-.PHONY: push
-push: Image.bin
+.PHONY: push-blinky
+push-blinky: Blinky.bin
 	$(STM32LOADER) -p $(STM32LOADER_PORT) -f F1 -ewv $^
