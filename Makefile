@@ -10,7 +10,7 @@ Image.bin: Image.elf
 	$(OBJCOPY) --output-target=binary $^ $@
 
 Image.elf: Blinky.o
-	$(LD) $< $(LDFLAGS) -nostdlib -o $@
+	$(LD) $< $(LDFLAGS) -Ttext=0x0 -nostdlib -o $@
 
 Blinky.o: Blinky.s
 	$(AS) -mcpu=cortex-m3 -c -o $@ $(ASFLAGS) $<
