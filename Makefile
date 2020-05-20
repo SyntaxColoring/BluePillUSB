@@ -14,7 +14,7 @@ AUTODETECTED_SERIAL_PORT = $(or $(SERIAL_PORT), \
                                 $(firstword $(wildcard /dev/ttyUSB*) $(wildcard /dev/tty.usb*)), \
                                 $(error Couldn't find a USB UART adapter.  Make sure it's connected, or manually specify it with SERIAL_PORT))
 
-SOURCE_DIRECTORY := Source
+SOURCE_DIRECTORY := .
 
 C_SOURCES := $(shell find $(SOURCE_DIRECTORY) -name '*.c')
 C_OBJECTS := $(C_SOURCES:.c=.o)
@@ -28,8 +28,14 @@ ALL_OBJECTS := $(C_OBJECTS) $(ASSEMBLY_OBJECTS)
 Image.bin: Image.elf
 	$(OBJCOPY) --output-target=binary $^ $@
 
+Blinky.bin: Blinky.elf
+	$(OBJCOPY) --output-target=binary $^ $@
+
 Image.elf: $(ALL_OBJECTS) Link.ld
 	$(LD) $(ALL_OBJECTS) $(LDFLAGS) -nostdlib -T Link.ld -o $@
+
+Blinky.elf: Blinky.o
+	$(LD) $< $(LDFLAGS) -Ttext=0x0 -nostdlib -o $@
 
 $(C_OBJECTS): %.o: %.c %.d
 	$(CC) -mcpu=cortex-m3 -mthumb -std=c11 -pedantic -Wall -Wextra -ffreestanding -Og -c -o $@ $(CFLAGS) $<
@@ -51,7 +57,14 @@ clean:
 	$(RM) $(SOURCE_DIRECTORY)/*.{o,d}
 	$(RM) Image.elf
 	$(RM) Image.bin
+	$(RM) Blinky.o
+	$(RM) Blinky.elf
+	$(RM) Blinky.bin
 
 .PHONY: push
 push: Image.bin
+	$(STM32LOADER) -p $(AUTODETECTED_SERIAL_PORT) -f F1 -ewv $^
+
+.PHONY: push-blinky
+push-blinky: Blinky.bin
 	$(STM32LOADER) -p $(AUTODETECTED_SERIAL_PORT) -f F1 -ewv $^
