@@ -1,4 +1,11 @@
-*.o
-*.elf
+# macOS junk:
+.DS_Store
+
+# Sublime Text junk:
+*.sublime-workspace
+
+# Binaries and build intermediates:
 *.bin
 *.d
+*.elf
+*.o
