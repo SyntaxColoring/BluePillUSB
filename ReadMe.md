@@ -1,6 +1,12 @@
 # Introduction
 
-This is a project to turn one of those $2 generic "blue pill" boards into a tiny USB drive.
+The [Blue Pill](https://stm32-base.org/boards/STM32F103C8T6-Blue-Pill) is a mysterious, brandless development board for the STM32F103 microcontroller.
+You can buy one online for around $2.
+(Fun, right?)
+
+![A small, rectangular, and blue printed circuit board assembly](BluePill.jpg)
+
+This is a project to program it to act like a tiny USB flash drive.
 
 # Useful resources
 
