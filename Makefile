@@ -10,9 +10,10 @@ STM32LOADER := stm32loader
 # - If SERIAL_PORT was given on the command line, use that.
 # - Else, if there are any /dev/ttyUSB* (as seen on Ubuntu) or /dev/tty.usb* (as seen on macOS) devices, use one of those.
 # - Else, quit with an error.
-AUTODETECTED_SERIAL_PORT = $(or $(SERIAL_PORT), \
-                                $(firstword $(wildcard /dev/ttyUSB*) $(wildcard /dev/tty.usb*)), \
-                                $(error Couldn't find a USB UART adapter.  Make sure it's connected, or manually specify it with SERIAL_PORT))
+AUTODETECTED_SERIAL_PORT = \
+	$(or $(SERIAL_PORT), \
+		$(firstword $(wildcard /dev/ttyUSB*) $(wildcard /dev/tty.usb*)), \
+		$(error Couldn't find a USB UART adapter.  Make sure it's connected, or manually specify it with SERIAL_PORT))
 
 SOURCE_DIRECTORY := .
 
