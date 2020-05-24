@@ -15,7 +15,7 @@ AUTODETECTED_SERIAL_PORT = \
 		$(firstword $(wildcard /dev/ttyUSB*) $(wildcard /dev/tty.usb*)), \
 		$(error Couldn't find a USB UART adapter.  Make sure it's connected, or manually specify it with SERIAL_PORT))
 
-SOURCE_DIRECTORY := .
+SOURCE_DIRECTORY := Source
 
 C_SOURCES := $(shell find $(SOURCE_DIRECTORY) -name '*.c')
 C_OBJECTS := $(C_SOURCES:.c=.o)
@@ -41,7 +41,7 @@ Blinky.elf: Blinky.o
 $(C_OBJECTS): %.o: %.c %.d
 	$(CC) -mcpu=cortex-m3 -mthumb -std=c11 -pedantic -Wall -Wextra -ffreestanding -Og -c -o $@ $(CFLAGS) $<
 
-$(ASSEMBLY_OBJECTS): %.o: %.s
+$(ASSEMBLY_OBJECTS) Blinky.o: %.o: %.s
 	$(AS) -mcpu=cortex-m3 -c -o $@ $(ASFLAGS) $<
 
 # The sole dependency being %.c here only applies when the .d file is being made from scratch.
