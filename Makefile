@@ -26,6 +26,9 @@ ASSEMBLY_OBJECTS := $(ASSEMBLY_SOURCES:.s=.o)
 
 ALL_OBJECTS := $(C_OBJECTS) $(ASSEMBLY_OBJECTS)
 
+# Don't rebuild final targets just because intermediate object files are missing.
+.SECONDARY: $(ALL_OBJECTS)
+
 Image.bin: Image.elf
 	$(OBJCOPY) --output-target=binary $^ $@
 
