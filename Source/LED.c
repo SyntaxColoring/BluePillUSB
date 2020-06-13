@@ -9,11 +9,11 @@ const uintptr_t GPIO_ODR_OFFSET = 0xc;
 const unsigned char CNF = 0x0; // General purpose, push-pull, output, maximum speed 10 MHz.
 const unsigned char MODE = 0x1;
 
-static const unsigned int GPIO_CRH_P13_SHIFT = 20;
+static const unsigned GPIO_CRH_P13_SHIFT = 20;
 
 static void enable_gpioc_clocking(void)
 {
-	const unsigned int RCC_APB2ENR_GPIOC_BIT = 4;
+	const unsigned RCC_APB2ENR_GPIOC_BIT = 4;
 	rcc_enable_peripheral(RCC_BUS_APB2, RCC_APB2ENR_GPIOC_BIT, 1);
 }
 

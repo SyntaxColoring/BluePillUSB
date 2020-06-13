@@ -15,4 +15,4 @@ enum RCCBus
 // - bus is which bus the peripheral is on.  Consult the system architecture diagram in RM0008 section 3.1.
 // - peripheral_number is the bit number corresponding to that peripheral in the RCC_APB1ENR or RCC_APB2ENR register.
 //   Consult RM0008 sections 7.3.7 and 7.3.8.
-void rcc_enable_peripheral(enum RCCBus bus, unsigned int peripheral_number, bool enable);
+void rcc_enable_peripheral(enum RCCBus bus, unsigned peripheral_number, bool enable);
