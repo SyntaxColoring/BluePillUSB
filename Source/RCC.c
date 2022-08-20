@@ -13,4 +13,6 @@ void rcc_enable_peripheral(const enum RCCBus bus, const unsigned peripheral_numb
 	
 	if (enable) *rcc_apbenr |= mask;
 	else *rcc_apbenr &= ~mask;
+	
+	// TODO: Also reset.
 }

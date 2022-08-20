@@ -1,0 +1,44 @@
+Careful reading of chapter 5
+
+
+Packet vs. transaction vs. transfer
+	???
+
+Transfer types vs. pipe types (message & stream)
+	Where does isochronous fit into this?
+		Spec says "If a non-isochronous pipe..."
+		"When a pipe is established for an endpoint, most of the pipe’s transfer characteristics are determined and remain fixed for the lifetime of the pipe"
+		"An isochronous pipe is a stream pipe and is, therefore, always uni-directional."
+		"Message pipes support the control transfer type, which is explained in Section 5.5."
+
+Christ, this is so confusing.  Control pipe === message pipe?  And that's apparently the only use for the control transfer type?  Why are there so many terms for the same thing?
+
+
+Packet sizes?
+
+
+
+Transaction vs. transfer?
+	Looks basically synonymous based on the 8.5 table of contents.
+
+
+STALL? HALT? NAK?
+	These are types of *handshake packets* and are explained in table 8-1 and below.
+	STALL is for critical error handling?
+
+
+USB resets and what they mean (reset the device? or just the USB state machine?)
+
+
+
+What is a packet, really?
+	5.4: "The data for any IRP is carried by the data field of the data packet as described in Section 8.3.4"
+
+
+
+
+
+STM32F: The USB peripheral interfaces with the USB host, detecting token packets, handling data transmission/reception, and processing handshake packets as required by the USB standard. Transaction formatting is performed by the hardware, including CRC generation and checking.
+
+
+"Sequence bit synchronization"?
